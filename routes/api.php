@@ -2,6 +2,10 @@
 
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
+use App\Http\Controllers\Api\Tools\BatteryToolController;
+use App\Http\Controllers\Api\Tools\PhoneToolController;
+use App\Http\Controllers\Api\Tools\ReminderController;
+use App\Http\Controllers\Api\Tools\VoiceToolController;
 
 /*
 |--------------------------------------------------------------------------
@@ -16,4 +20,17 @@ use Illuminate\Support\Facades\Route;
 
 Route::middleware('auth:sanctum')->get('/user', function (Request $request) {
     return $request->user();
+});
+
+Route::prefix('tools')->group(function () {
+    Route::post('voice/process', [VoiceToolController::class, 'process']);
+
+    // These commands are returned to the mobile client, which performs the
+    // requested device action after checking its own permissions.
+    Route::post('phone/commands', [PhoneToolController::class, 'execute']);
+
+    Route::post('battery/report', [BatteryToolController::class, 'report']);
+
+    Route::apiResource('reminders', ReminderController::class)
+        ->only(['index', 'store', 'show', 'update', 'destroy']);
 });
