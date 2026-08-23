@@ -30,4 +30,13 @@ return [
         'region' => env('AWS_DEFAULT_REGION', 'us-east-1'),
     ],
 
+    'voice' => [
+        'provider' => env('VOICE_PROVIDER', 'openai'),
+        'openai_key' => env('OPENAI_API_KEY'),
+        'openai_base_url' => env('OPENAI_BASE_URL', 'https://api.openai.com/v1'),
+        'transcription_model' => env('VOICE_TRANSCRIPTION_MODEL', 'gpt-4o-mini-transcribe'),
+        'speech_model' => env('VOICE_SPEECH_MODEL', 'gpt-4o-mini-tts'),
+        'default_wake_word' => env('VOICE_WAKE_WORD', 'hey boogy'),
+    ],
+
 ];

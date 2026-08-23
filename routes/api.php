@@ -23,7 +23,9 @@ Route::middleware('auth:sanctum')->get('/user', function (Request $request) {
 });
 
 Route::prefix('tools')->group(function () {
-    Route::post('voice/process', [VoiceToolController::class, 'process']);
+    Route::post('voice/v1/wake-word', [VoiceToolController::class, 'detectWakeWord']);
+    Route::post('voice/v2/transcribe', [VoiceToolController::class, 'transcribe']);
+    Route::post('voice/v3/synthesize', [VoiceToolController::class, 'synthesize']);
 
     // These commands are returned to the mobile client, which performs the
     // requested device action after checking its own permissions.
