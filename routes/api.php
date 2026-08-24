@@ -27,9 +27,12 @@ Route::prefix('tools')->group(function () {
     Route::post('voice/v2/transcribe', [VoiceToolController::class, 'transcribe']);
     Route::post('voice/v3/synthesize', [VoiceToolController::class, 'synthesize']);
 
-    // These commands are returned to the mobile client, which performs the
-    // requested device action after checking its own permissions.
-    Route::post('phone/commands', [PhoneToolController::class, 'execute']);
+    // P1-P5 commands are returned to the mobile client after it checks permissions.
+    Route::post('phone/p1/open-app', [PhoneToolController::class, 'openApp']);
+    Route::post('phone/p2/calls', [PhoneToolController::class, 'phoneCall']);
+    Route::post('phone/p3/contacts', [PhoneToolController::class, 'contacts']);
+    Route::post('phone/p4/device-actions', [PhoneToolController::class, 'deviceAction']);
+    Route::post('phone/p5/notifications', [PhoneToolController::class, 'notifications']);
 
     Route::post('battery/report', [BatteryToolController::class, 'report']);
 
