@@ -4,6 +4,7 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\Api\Tools\BatteryToolController;
 use App\Http\Controllers\Api\Tools\PhoneToolController;
+use App\Http\Controllers\Api\Tools\RobotToolController;
 use App\Http\Controllers\Api\Tools\TimeToolController;
 use App\Http\Controllers\Api\Tools\VoiceToolController;
 
@@ -41,4 +42,8 @@ Route::prefix('tools')->group(function () {
     Route::post('time/t1/reminders', [TimeToolController::class, 'setReminder']);
     Route::post('time/t2/alarms', [TimeToolController::class, 'setAlarm']);
     Route::get('time/t3/date-time', [TimeToolController::class, 'dateTime']);
+
+    Route::post('robot/r1/idle', [RobotToolController::class, 'idle']);
+    Route::post('robot/r2/talking', [RobotToolController::class, 'talking']);
+    Route::post('robot/r3/wake', [RobotToolController::class, 'wake']);
 });
