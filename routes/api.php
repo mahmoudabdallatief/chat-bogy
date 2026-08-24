@@ -4,7 +4,7 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\Api\Tools\BatteryToolController;
 use App\Http\Controllers\Api\Tools\PhoneToolController;
-use App\Http\Controllers\Api\Tools\ReminderController;
+use App\Http\Controllers\Api\Tools\TimeToolController;
 use App\Http\Controllers\Api\Tools\VoiceToolController;
 
 /*
@@ -36,6 +36,7 @@ Route::prefix('tools')->group(function () {
 
     Route::post('battery/report', [BatteryToolController::class, 'report']);
 
-    Route::apiResource('reminders', ReminderController::class)
-        ->only(['index', 'store', 'show', 'update', 'destroy']);
+    Route::post('time/t1/reminders', [TimeToolController::class, 'setReminder']);
+    Route::post('time/t2/alarms', [TimeToolController::class, 'setAlarm']);
+    Route::get('time/t3/date-time', [TimeToolController::class, 'dateTime']);
 });
