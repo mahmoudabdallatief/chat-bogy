@@ -38,6 +38,16 @@ class BatteryToolController extends Controller
         return $this->queue('B3', $data, 'low_battery', 'Battery level is low.');
     }
 
+    public function chargerRemoved(Request $request)
+    {
+        $data = $request->validate([
+            'device_id' => ['required', 'string', 'max:191'],
+            'level' => ['nullable', 'integer', 'between:0,100'],
+        ]);
+
+        return $this->queue('B4', $data, 'charger_removed', 'Charger removed.');
+    }
+
     private function queue($group, array $data, $action, $message)
     {
         return response()->json([

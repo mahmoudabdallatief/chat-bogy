@@ -24,6 +24,7 @@ class BatteryToolTest extends TestCase
             ['/api/tools/battery/b1/charging-started', ['level' => 42], 'B1', 'charging_started'],
             ['/api/tools/battery/b2/charging-complete', ['level' => 100], 'B2', 'charging_complete'],
             ['/api/tools/battery/b3/low-battery', ['level' => 15], 'B3', 'low_battery'],
+            ['/api/tools/battery/b4/charger-removed', ['level' => 50], 'B4', 'charger_removed'],
         ];
     }
 

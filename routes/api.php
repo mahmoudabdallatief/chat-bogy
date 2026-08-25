@@ -44,6 +44,7 @@ Route::prefix('tools')->group(function () {
     Route::post('battery/b1/charging-started', [BatteryToolController::class, 'chargingStarted']);
     Route::post('battery/b2/charging-complete', [BatteryToolController::class, 'chargingComplete']);
     Route::post('battery/b3/low-battery', [BatteryToolController::class, 'lowBattery']);
+    Route::post('battery/b4/charger-removed', [BatteryToolController::class, 'chargerRemoved']);
 
     Route::post('time/t1/reminders', [TimeToolController::class, 'setReminder']);
     Route::post('time/t2/alarms', [TimeToolController::class, 'setAlarm']);
