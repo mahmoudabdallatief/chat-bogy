@@ -7,6 +7,12 @@ use App\Http\Controllers\Api\Tools\PhoneToolController;
 use App\Http\Controllers\Api\Tools\RobotToolController;
 use App\Http\Controllers\Api\Tools\TimeToolController;
 use App\Http\Controllers\Api\Tools\VoiceToolController;
+use App\Http\Controllers\Api\AiCore\AiCoreController;
+use App\Http\Controllers\Api\AiCore\CommandController;
+use App\Http\Controllers\Api\AiCore\ConversationController;
+use App\Http\Controllers\Api\AiCore\IntentController;
+use App\Http\Controllers\Api\AiCore\MemoryController;
+use App\Http\Controllers\Api\AiCore\ToolFlowchartController;
 
 /*
 |--------------------------------------------------------------------------
@@ -46,4 +52,39 @@ Route::prefix('tools')->group(function () {
     Route::post('robot/r1/idle', [RobotToolController::class, 'idle']);
     Route::post('robot/r2/talking', [RobotToolController::class, 'talking']);
     Route::post('robot/r3/wake', [RobotToolController::class, 'wake']);
+});
+
+Route::prefix('ai-core')->group(function () {
+    Route::post('chat', [AiCoreController::class, 'chat']);
+
+    Route::prefix('conversation')->group(function () {
+        Route::post('start', [ConversationController::class, 'start']);
+        Route::get('list', [ConversationController::class, 'list']);
+        Route::get('{id}/messages', [ConversationController::class, 'show']);
+        Route::delete('{id}', [ConversationController::class, 'destroy']);
+    });
+
+    Route::prefix('command')->group(function () {
+        Route::post('parse', [CommandController::class, 'parse']);
+        Route::post('execute', [CommandController::class, 'execute']);
+    });
+
+    Route::prefix('memory')->group(function () {
+        Route::post('store', [MemoryController::class, 'store']);
+        Route::get('retrieve', [MemoryController::class, 'retrieve']);
+        Route::get('search', [MemoryController::class, 'search']);
+        Route::get('list', [MemoryController::class, 'index']);
+        Route::delete('{id}', [MemoryController::class, 'destroy']);
+    });
+
+    Route::prefix('intent')->group(function () {
+        Route::post('detect', [IntentController::class, 'detect']);
+        Route::get('list', [IntentController::class, 'index']);
+    });
+
+    Route::prefix('tools')->group(function () {
+        Route::post('execute', [ToolFlowchartController::class, 'execute']);
+        Route::post('resolve', [ToolFlowchartController::class, 'resolve']);
+        Route::get('flowchart', [ToolFlowchartController::class, 'flowchart']);
+    });
 });
