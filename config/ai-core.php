@@ -419,4 +419,13 @@ return [
             'description' => 'Retrieve a memory',
         ],
     ],
+
+    'ollama' => [
+        'enabled' => env('OLLAMA_ENABLED', false),
+        'base_url' => env('OLLAMA_BASE_URL', 'http://localhost:11434'),
+        'model' => env('OLLAMA_MODEL', 'llama3'),
+        'timeout' => (int) env('OLLAMA_TIMEOUT', 120),
+        'system_prompt' => env('OLLAMA_SYSTEM_PROMPT', 'You are a helpful AI assistant named Boogy. Be concise, friendly, and helpful.'),
+        'max_context_messages' => (int) env('OLLAMA_MAX_CONTEXT_MESSAGES', 10),
+    ],
 ];

@@ -2,6 +2,9 @@
 
 namespace App\Services\AiCore;
 
+use App\Models\Conversation;
+use Illuminate\Support\Collection;
+
 class AiCoreService
 {
     protected $intentDetector;
@@ -9,19 +12,22 @@ class AiCoreService
     protected $memoryManager;
     protected $commandProcessor;
     protected $conversationManager;
+    protected $ollamaChatService;
 
     public function __construct(
         IntentDetector $intentDetector,
         ToolFlowchart $flowchart,
         MemoryManager $memoryManager,
         CommandProcessor $commandProcessor,
-        ConversationManager $conversationManager
+        ConversationManager $conversationManager,
+        OllamaChatService $ollamaChatService
     ) {
         $this->intentDetector = $intentDetector;
         $this->flowchart = $flowchart;
         $this->memoryManager = $memoryManager;
         $this->commandProcessor = $commandProcessor;
         $this->conversationManager = $conversationManager;
+        $this->ollamaChatService = $ollamaChatService;
     }
 
     public function process(string $text, string $deviceId, ?string $conversationId = null, ?string $title = null): array
@@ -74,7 +80,7 @@ class AiCoreService
                     $reply = 'I\'ve queued a command for your device.';
                 }
             } else {
-                $reply = $this->fallbackReply($intentName, $intentResult);
+                $reply = $this->generateLlmReply($conversation, $text, $memories);
             }
         }
 
@@ -104,6 +110,36 @@ class AiCoreService
                 'reply' => $reply ?? 'I\'ve processed your message.',
             ],
         ];
+    }
+
+    protected function generateLlmReply(Conversation $conversation, string $userText, Collection $memories): string
+    {
+        if (!$this->ollamaChatService->isEnabled()) {
+            return "I'm not sure I understand. Could you rephrase that?";
+        }
+
+        $recentMessages = $this->conversationManager->getLastMessages($conversation, config('ai-core.ollama.max_context_messages', 10));
+        $messages = $this->ollamaChatService->buildContextMessages($recentMessages);
+
+        $systemPrompt = config('ai-core.ollama.system_prompt', 'You are a helpful AI assistant named Boogy. Be concise, friendly, and helpful.');
+
+        if ($memories->isNotEmpty()) {
+            $memoryContext = $memories->take(5)->map(fn ($m) => "- {$m->key}: {$m->value}")->implode("\n");
+            $systemPrompt .= "\n\nRelevant memories:\n" . $memoryContext;
+        }
+
+        array_unshift($messages, [
+            'role' => 'system',
+            'content' => $systemPrompt,
+        ]);
+
+        $reply = $this->ollamaChatService->chat($messages);
+
+        if ($reply !== null && $reply !== '') {
+            return $reply;
+        }
+
+        return "I'm not sure I understand. Could you rephrase that?";
     }
 
     protected function handleMemoryStore(string $deviceId, array $entities, array $intentResult): string

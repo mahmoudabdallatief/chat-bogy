@@ -13,6 +13,7 @@ use App\Http\Controllers\Api\AiCore\ConversationController;
 use App\Http\Controllers\Api\AiCore\IntentController;
 use App\Http\Controllers\Api\AiCore\MemoryController;
 use App\Http\Controllers\Api\AiCore\ToolFlowchartController;
+use App\Http\Controllers\Api\SettingsController;
 
 /*
 |--------------------------------------------------------------------------
@@ -89,3 +90,39 @@ Route::prefix('ai-core')->group(function () {
         Route::get('flowchart', [ToolFlowchartController::class, 'flowchart']);
     });
 });
+
+Route::prefix('settings')->group(function () {
+    Route::get('seed', [SettingsController::class, 'seed']);
+
+    Route::group(['prefix' => 'robot'], function () {
+        Route::get('/', [SettingsController::class, 'robot']);
+        Route::put('/', [SettingsController::class, 'updateRobot']);
+    });
+
+    Route::group(['prefix' => 'voice'], function () {
+        Route::get('/', [SettingsController::class, 'voice']);
+        Route::put('/', [SettingsController::class, 'updateVoice']);
+    });
+
+    Route::group(['prefix' => 'notifications'], function () {
+        Route::get('/', [SettingsController::class, 'notifications']);
+        Route::put('/', [SettingsController::class, 'updateNotifications']);
+    });
+
+    Route::group(['prefix' => 'overlay'], function () {
+        Route::get('/', [SettingsController::class, 'overlay']);
+        Route::put('/', [SettingsController::class, 'updateOverlay']);
+    });
+
+    Route::group(['prefix' => 'ai'], function () {
+        Route::get('/', [SettingsController::class, 'ai']);
+        Route::put('/', [SettingsController::class, 'updateAi']);
+    });
+
+    Route::get('/', [SettingsController::class, 'index']);
+    Route::get('{key}', [SettingsController::class, 'show']);
+    Route::post('/', [SettingsController::class, 'store']);
+    Route::put('{key}', [SettingsController::class, 'update']);
+    Route::delete('{key}', [SettingsController::class, 'destroy']);
+});
+
