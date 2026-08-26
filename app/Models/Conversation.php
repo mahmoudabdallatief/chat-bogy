@@ -33,7 +33,7 @@ class Conversation extends Model
 
     public function messages(): HasMany
     {
-        return $this->hasMany(ConversationMessage::class)->orderBy('created_at');
+        return $this->hasMany(ConversationMessage::class);
     }
 
     public function scopeByDevice($query, string $deviceId)

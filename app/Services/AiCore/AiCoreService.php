@@ -12,7 +12,7 @@ class AiCoreService
     protected $memoryManager;
     protected $commandProcessor;
     protected $conversationManager;
-    protected $ollamaChatService;
+    protected $geminiChatService;
 
     public function __construct(
         IntentDetector $intentDetector,
@@ -20,14 +20,14 @@ class AiCoreService
         MemoryManager $memoryManager,
         CommandProcessor $commandProcessor,
         ConversationManager $conversationManager,
-        OllamaChatService $ollamaChatService
+        GeminiChatService $geminiChatService
     ) {
         $this->intentDetector = $intentDetector;
         $this->flowchart = $flowchart;
         $this->memoryManager = $memoryManager;
         $this->commandProcessor = $commandProcessor;
         $this->conversationManager = $conversationManager;
-        $this->ollamaChatService = $ollamaChatService;
+        $this->geminiChatService = $geminiChatService;
     }
 
     public function process(string $text, string $deviceId, ?string $conversationId = null, ?string $title = null): array
@@ -114,14 +114,14 @@ class AiCoreService
 
     protected function generateLlmReply(Conversation $conversation, string $userText, Collection $memories): string
     {
-        if (!$this->ollamaChatService->isEnabled()) {
-            return "I'm not sure I understand. Could you rephrase that?";
+        if (!$this->geminiChatService->isEnabled()) {
+            return "I'm running in local mode right now. For AI replies, please add a valid Gemini API key in the server .env file.";
         }
 
-        $recentMessages = $this->conversationManager->getLastMessages($conversation, config('ai-core.ollama.max_context_messages', 10));
-        $messages = $this->ollamaChatService->buildContextMessages($recentMessages);
+        $recentMessages = $this->conversationManager->getLastMessages($conversation, config('ai-core.gemini.max_context_messages', 10));
+        $messages = $this->geminiChatService->buildContextMessages($recentMessages);
 
-        $systemPrompt = config('ai-core.ollama.system_prompt', 'You are a helpful AI assistant named Boogy. Be concise, friendly, and helpful.');
+        $systemPrompt = config('ai-core.gemini.system_prompt', 'You are a helpful AI assistant named Boogy. Be concise, friendly, and helpful.');
 
         if ($memories->isNotEmpty()) {
             $memoryContext = $memories->take(5)->map(fn ($m) => "- {$m->key}: {$m->value}")->implode("\n");
@@ -133,13 +133,13 @@ class AiCoreService
             'content' => $systemPrompt,
         ]);
 
-        $reply = $this->ollamaChatService->chat($messages);
+        $reply = $this->geminiChatService->chat($messages);
 
         if ($reply !== null && $reply !== '') {
             return $reply;
         }
 
-        return "I'm not sure I understand. Could you rephrase that?";
+        return "I tried to think about that, but the AI service didn't return a reply. Please check the Gemini API key and try again.";
     }
 
     protected function handleMemoryStore(string $deviceId, array $entities, array $intentResult): string
