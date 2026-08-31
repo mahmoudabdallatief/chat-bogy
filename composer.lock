@@ -21,7 +21,7 @@
                 "shasum": ""
             },
             "require": {
-                "php": "^7.3|^8.0",
+                "php": "^8.1",
                 "symfony/http-foundation": "^5.3|^6|^7|^8",
                 "symfony/http-kernel": "^5.3|^6|^7|^8"
             },
@@ -1064,7 +1064,7 @@
                 "monolog/monolog": "^2.0",
                 "nesbot/carbon": "^2.53.1",
                 "opis/closure": "^3.6",
-                "php": "^7.3|^8.0",
+                "php": "^8.1",
                 "psr/container": "^1.0",
                 "psr/log": "^1.0|^2.0",
                 "psr/simple-cache": "^1.0",
@@ -1290,7 +1290,7 @@
                 "shasum": ""
             },
             "require": {
-                "php": "^7.3|^8.0"
+                "php": "^8.1"
             },
             "require-dev": {
                 "illuminate/support": "^8.0|^9.0|^10.0|^11.0",
@@ -5605,7 +5605,7 @@
                 "shasum": ""
             },
             "require": {
-                "php": "^7.3|^8.0"
+                "php": "^8.1"
             },
             "require-dev": {
                 "friendsofphp/php-cs-fixer": "^v2.15.8",
