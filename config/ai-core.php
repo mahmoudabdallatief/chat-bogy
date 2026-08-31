@@ -423,7 +423,7 @@ return [
     'gemini' => [
         'enabled' => env('GEMINI_ENABLED', true),
         'api_key' => env('GEMINI_API_KEY', ''),
-        'model' => env('GEMINI_MODEL', 'gemini-3.6-flash'),
+        'model' => env('GEMINI_MODEL', 'gemini-2.5-flash'),
         'timeout' => (int) env('GEMINI_TIMEOUT', 60),
         'system_prompt' => env('GEMINI_SYSTEM_PROMPT', 'You are a helpful AI assistant named Boogy. Be concise, friendly, and helpful.'),
         'max_context_messages' => (int) env('GEMINI_MAX_CONTEXT_MESSAGES', 10),
